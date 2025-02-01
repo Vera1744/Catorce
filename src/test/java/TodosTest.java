@@ -2,6 +2,8 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
 import javax.naming.directory.SearchResult;
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+import java.util.Arrays;
 
 public class TodosTest {
     @Test
@@ -46,6 +48,7 @@ public class TodosTest {
         boolean actual = epic.matches("Яйца");
         Assertions.assertEquals(expected, actual);
     }
+
     @Test
     public void TestSearchMeeting() {
         Meeting meet = new Meeting(
@@ -59,8 +62,37 @@ public class TodosTest {
     }
 
     @Test
+    public void TestSearchShouldFindOneTask() {
+        SimpleTask simpleTask = new SimpleTask(22, "Позвонить другу");
+        String[] subtasks = {"Творог", "Бананы", "Сыр"};
+        Epic epic = new Epic(55, subtasks);
 
+        Todos todos = new Todos();
 
+        todos.add(simpleTask);
+        todos.add(epic);
 
+        Task[] expected = {epic};
+        Task[] actual = todos.search("Бананы");
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
+    @Test
+    public void TestSearchNotShouldFindOneTask() {
+        SimpleTask simpleTask = new SimpleTask(22, "Позвонить другу");
+        String[] subtasks = {"Творог", "Бананы", "Сыр"};
+        Epic epic = new Epic(55, subtasks);
+
+        Todos todos = new Todos();
+
+        todos.add(simpleTask);
+        todos.add(epic);
+
+        Task[] expected = {};
+        Task[] actual = todos.search("Хлеб");
+        Assertions.assertArrayEquals(expected, actual);
+
+    }
 
 }
+
